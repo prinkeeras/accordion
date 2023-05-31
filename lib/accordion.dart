@@ -46,6 +46,8 @@ class Accordion extends StatelessWidget with CommonParams {
   final bool disableScrolling;
   static bool sectionAnimation = true;
   static bool sectionScaleAnimation = true;
+  final Duration animationDuration;
+  final double contentAnimationVelocity;
   final listCtrl = Get.put(ListController());
 
   Accordion({
@@ -77,6 +79,8 @@ class Accordion extends StatelessWidget with CommonParams {
     this.disableScrolling = false,
     SectionHapticFeedback? sectionOpeningHapticFeedback,
     SectionHapticFeedback? sectionClosingHapticFeedback,
+    this.contentAnimationVelocity = 20.0,
+    this.animationDuration = const Duration(milliseconds: 150),
 
     /// if to use any animation when opening and closing sections
     bool? openAndCloseAnimation,
@@ -155,6 +159,8 @@ class Accordion extends StatelessWidget with CommonParams {
             key: key,
             index: index,
             isOpen: child.isOpen,
+            contentAnimationVelocity: contentAnimationVelocity,
+            headerAnimationDuration: animationDuration,
             scrollIntoViewOfItems: scrollIntoViewOfItems,
             headerBackgroundColor:
                 child.headerBackgroundColor ?? headerBackgroundColor,

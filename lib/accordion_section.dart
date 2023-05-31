@@ -38,6 +38,8 @@ class AccordionSection extends StatelessWidget with CommonParams {
   late final UniqueKey uniqueKey;
   late final int index;
   final bool isOpen;
+  final Duration headerAnimationDuration;
+  final double contentAnimationVelocity;
 
   /// Callback function for when a section opens
   final Function? onOpenSection;
@@ -79,6 +81,8 @@ class AccordionSection extends StatelessWidget with CommonParams {
     String? accordionId,
     this.onOpenSection,
     this.onCloseSection,
+    this.contentAnimationVelocity = 20,
+    this.headerAnimationDuration = const Duration(milliseconds: 150),
   }) : super(key: key) {
     final listCtrl = Get.put(ListController(), tag: accordionId);
     uniqueKey = listCtrl.keys.elementAt(index);
@@ -106,7 +110,6 @@ class AccordionSection extends StatelessWidget with CommonParams {
     this.sectionOpeningHapticFeedback = sectionOpeningHapticFeedback;
     this.sectionClosingHapticFeedback = sectionClosingHapticFeedback;
     this.accordionId = accordionId;
-
     listCtrl.controllerIsOpen.stream.asBroadcastStream().listen((data) {
       sectionCtrl.isSectionOpen.value = listCtrl.openSections.contains(key);
     });
@@ -130,8 +133,10 @@ class AccordionSection extends StatelessWidget with CommonParams {
           : 0.seconds,
       () {
         if (Accordion.sectionAnimation) {
-          sectionCtrl.controller
-              .fling(velocity: open ? 1 : -1, springDescription: springFast);
+          sectionCtrl.controller.fling(
+              velocity:
+                  open ? contentAnimationVelocity : -contentAnimationVelocity,
+              springDescription: springFast);
         } else {
           sectionCtrl.controller.value = open ? 1 : 0;
         }
@@ -208,9 +213,9 @@ class AccordionSection extends StatelessWidget with CommonParams {
             },
             child: AnimatedContainer(
               duration: Accordion.sectionAnimation
-                  ? 750.milliseconds
+                  ? headerAnimationDuration
                   : 0.milliseconds,
-              curve: Curves.easeOut,
+              curve: Curves.easeInOut,
               alignment: Alignment.center,
               padding: headerPadding,
               decoration: BoxDecoration(
