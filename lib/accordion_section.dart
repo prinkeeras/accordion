@@ -277,7 +277,7 @@ class AccordionSection extends StatelessWidget with CommonParams {
                       child: Container(
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.transparent,
                             borderRadius: BorderRadius.vertical(
                                 bottom: Radius.circular(
                                     contentBorderRadius! / 1.02))),
